@@ -1,0 +1,38 @@
+plugins {
+    id "com.bmuschko.cargo" version "2.1.1"
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'war'
+
+repositories {
+    mavenCentral()
+}
+gradle.properties
+dependencies {
+    compile 'org.slf4j:slf4j-api:1.7.5'
+    testCompile "junit:junit:4.11"
+}
+
+cargo {
+
+    port = apiTestPort.toInteger()
+
+    remote.hostname = apiTestBaseUri
+
+    containerId = 'tomcat7x'
+//    deployable {
+//        file = project(':planitpal').war.archivePath
+//        context = '/'
+//    }
+    local {
+        installer {
+            installUrl = tomcatTarballUrl
+            downloadDir = file("${rootProject.buildDir}/download")
+            extractDir = file("${rootProject.buildDir}/extract")
+        }
+        homeDir = mkdir("/tmp/cargo/planitpal")
+        configHomeDir = mkdir("/tmp/cargo/planitpal")
+    }
+}
