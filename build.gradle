@@ -4,13 +4,15 @@ buildscript {
     }
 }
 
+
 plugins {
     id "com.bmuschko.cargo" version "2.1.1"
 }
 
+evaluationDependsOn(':planitpal-service')
+
 apply plugin: 'java'
 apply plugin: 'idea'
-apply plugin: 'war'
 
 allprojects {
     project.ext {
@@ -56,10 +58,10 @@ cargo {
     remote.hostname = apiTestBaseUri
 
     containerId = 'tomcat7x'
-//    deployable {
-//        file = project(':planitpal').war.archivePath
-//        context = '/'
-//    }
+    deployable {
+        file = project(':planitpal-service').war.archivePath
+        context = '/'
+    }
     local {
         installer {
             installUrl = tomcatTarballUrl
@@ -69,4 +71,18 @@ cargo {
         homeDir = mkdir("/tmp/cargo/planitpal")
         configHomeDir = mkdir("/tmp/cargo/planitpal")
     }
+}
+
+cargoRunLocal.dependsOn project(':planitpal-service').assemble
+cargoStartLocal.dependsOn project(':planitpal-service').assemble
+
+task cargoDebugLocal {
+    doFirst {
+        cargo.local.jvmArgs = "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000"
+    }
+    finalizedBy ':cargoStartLocal'
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = gradleWrapperVersion
 }
