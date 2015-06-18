@@ -16,4 +16,12 @@ include 'api'
 include 'services:webservice'
 */
 
-rootProject.name = 'planitpal'
+rootProject.name = 'planitpal-service-root'
+
+include 'planitpal-service'
+
+//, 'acceptance-tests'
+//
+//if (hasProperty("include.performance")) {
+//    include "performance-tests"
+//}

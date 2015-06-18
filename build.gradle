@@ -1,3 +1,9 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+}
+
 plugins {
     id "com.bmuschko.cargo" version "2.1.1"
 }
@@ -6,13 +12,41 @@ apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'war'
 
-repositories {
-    mavenCentral()
+allprojects {
+    project.ext {
+        sourceCo6patibility = JavaVersion.VERSION_1_6
+        targetCompatibility = JavaVersion.VERSION_1_6
+    }
+
+    repositories {
+        mavenCentral()
+    }
+
+    apply plugin: 'idea'
+    apply plugin: 'eclipse'
+    apply plugin: 'eclipse-wtp'
+
+
 }
-gradle.properties
-dependencies {
-    compile 'org.slf4j:slf4j-api:1.7.5'
-    testCompile "junit:junit:4.11"
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'maven'
+
+    defaultTasks "test"
+
+    repositories {
+        maven {
+            url "http://artifactory.gapinc.dev/artifactory/remote-repos"
+        }
+        maven {
+            url "http://artifactory.gapinc.dev/artifactory/local-non-prod"
+        }
+        maven {
+            url "http://artifactory.gapinc.dev/artifactory/gemjars"
+        }
+    }
+    group = "$group"
 }
 
 cargo {

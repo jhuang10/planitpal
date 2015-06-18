@@ -1,0 +1,88 @@
+apply plugin: 'war'
+
+if (gradle.gradleVersion != "1.1") {
+    apply plugin: 'sonar-runner'
+}
+
+configurations {
+    coberturaRuntime { extendsFrom testRuntime }
+}
+
+dependencies {
+    compile "javax.servlet:javax.servlet-api:$javaxServletVersion"
+    compile "org.springframework:spring-webmvc:$springFrameworkVersion"
+    compile "org.springframework.data:spring-data-mongodb:$springDataMongoDbVersion"
+    compile "org.mongodb:mongo-java-driver:$mongoJavaDriverVersion"
+    compile "org.slf4j:slf4j-api:$slf4jVersion"
+    compile "org.projectlombok:lombok:$lombokVersion"
+    compile "org.apache.commons:commons-lang3:3.1"
+
+    compile "com.fasterxml.jackson.core:jackson-annotations:$jacksonVersion"
+    compile "com.fasterxml.jackson.datatype:jackson-datatype-joda:$jacksonVersion"
+    compile "ch.qos.logback:logback-classic:$logbackVersion"
+
+    compile "org.springframework.security:spring-security-web:$springSecurityWeb"
+    compile "org.springframework.security:spring-security-config:$springSecurityConfig"
+
+    testCompile "org.springframework:spring-test:$springFrameworkVersion"
+    testCompile "org.hamcrest:hamcrest-all:$hamcrestVersion"
+    testCompile("org.mockito:mockito-all:$mockitoVersion") {
+        exclude group: 'org.hamcrest'
+    }
+    testCompile("junit:junit:$junitVersion") {
+        exclude group: 'org.hamcrest'
+    }
+
+    coberturaRuntime "net.sourceforge.cobertura:cobertura:$coberturaVersion"
+
+}
+
+project.task('coberturaPrepare') {
+    ext.datafileLocation = "${project.buildDir}/cobertura.ser"
+    doLast {
+        ant.taskdef(name: 'coberturaInstrument', classname: 'net.sourceforge.cobertura.ant.InstrumentTask',
+                classpath: configurations.coberturaRuntime.asPath)
+        ant.taskdef(name: 'coberturaReport', classname: 'net.sourceforge.cobertura.ant.ReportTask',
+                classpath: configurations.coberturaRuntime.asPath)
+    }
+}
+
+project.task('coberturaInstrument', dependsOn: ['classes', 'coberturaPrepare']) {
+    ext.outputDir = "${sourceSets.main.output.classesDir}-instrumented"
+    doLast {
+        ant.coberturaInstrument(todir: outputDir, datafile: coberturaPrepare.datafileLocation) {
+            fileset(dir: sourceSets.main.output.classesDir, excludes: coberturaExcludes)
+        }
+    }
+}
+
+project.task('coberturaCoverage', dependsOn: ['coberturaInstrument'])
+
+project.task('coberturaReport', dependsOn: ['coberturaPrepare', 'coberturaCoverage']) << {
+    ant.coberturaReport(format: "html", destdir: "${reporting.baseDir}/coverage/html",
+            srcdir: 'src/main/java', datafile: coberturaPrepare.datafileLocation)
+    ant.coberturaReport(format: "xml", destdir: "${reporting.baseDir}/coverage/xml",
+            srcdir: 'src/main/java', datafile: coberturaPrepare.datafileLocation)
+}
+
+test {
+    testLogging {
+        events "passed", "failed", "skipped"
+        info {
+            events "passed", "failed", "skipped"
+        }
+    }
+    if (collectCoverage == 'true') {
+        systemProperty 'net.sourceforge.cobertura.datafile', coberturaPrepare.datafileLocation
+        classpath = files(coberturaInstrument.outputDir) + classpath + configurations.coberturaRuntime
+    }
+}
+
+coberturaCoverage.dependsOn << 'test'
+
+war {
+    doFirst {
+        def versionFile = file("${sourceSets.main.output.resourcesDir}/configuration/version.properties")
+        versionFile.write("application.version=${version}\n")
+    }
+}
