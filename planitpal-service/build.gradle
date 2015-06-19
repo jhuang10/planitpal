@@ -8,6 +8,8 @@ dependencies {
     compile "org.slf4j:slf4j-api:$slf4jVersion"
     compile "org.projectlombok:lombok:$lombokVersion"
     compile "org.apache.commons:commons-lang3:3.1"
+    compile 'org.aeonbits.owner:owner:1.0.8'
+    compile 'com.google.collections:google-collections:1.0-rc2'
 
     compile "com.fasterxml.jackson.core:jackson-annotations:$jacksonVersion"
     compile "com.fasterxml.jackson.datatype:jackson-datatype-joda:$jacksonVersion"

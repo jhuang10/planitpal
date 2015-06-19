@@ -2,8 +2,8 @@ package com.planitpal.plan.templateservice.domain.repository;
 
 import com.planitpal.plan.templateservice.domain.Example;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
-@Component
+@Repository
 public interface ExampleRepository extends CrudRepository<Example, String> {
 }

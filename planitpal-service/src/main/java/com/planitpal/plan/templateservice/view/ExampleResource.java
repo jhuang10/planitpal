@@ -26,4 +26,8 @@ public class ExampleResource {
     public Example createStyle() {
         return new Example(description, legacyId, colorId, marketId);
     }
+
+    public Example sample() {
+        return new Example("This", "Is", "An", "Example");
+    }
 }

@@ -21,12 +21,13 @@ import java.util.List;
 @Configuration
 @EnableWebMvc
 @ComponentScan(
-        basePackages = {"com.gap.plan.templateservice",
-                "com.gap.plan.templateservice.controller"
+        basePackages = {"com.planitpal.plan.templateservice",
+                "com.planitpal.plan.templateservice.controller"
         },
         useDefaultFilters = false,
         includeFilters = {@ComponentScan.Filter(type = FilterType.ANNOTATION, value = {Controller.class, Component.class})})
 public class ApplicationConfiguration extends WebMvcConfigurerAdapter {
+
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonConverter;
 

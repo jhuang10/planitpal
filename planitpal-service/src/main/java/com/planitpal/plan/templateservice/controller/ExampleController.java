@@ -24,7 +24,7 @@ public class ExampleController {
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
     public ExampleResource create(@RequestBody ExampleResource resource) {
-        Example example = resource.createStyle();
+        Example example = resource.sample();
         exampleRepository.save(example);
         return resource;
     }

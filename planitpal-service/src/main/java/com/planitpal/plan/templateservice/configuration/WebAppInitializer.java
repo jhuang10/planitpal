@@ -23,7 +23,7 @@ public class WebAppInitializer implements WebApplicationInitializer {
 
     private AnnotationConfigWebApplicationContext getContext() {
         AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
-        context.setConfigLocation("com.gap.plan.templateservice.configuration");
+        context.setConfigLocation("com.planitpal.plan.templateservice.configuration");
         return context;
     }
 }

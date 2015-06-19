@@ -1,63 +1,61 @@
 package com.planitpal.plan.templateservice.configuration;
 
+import com.mongodb.DB;
 import com.mongodb.Mongo;
-import com.mongodb.MongoClient;
-import com.mongodb.MongoClientOptions;
-import com.mongodb.ServerAddress;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.authentication.UserCredentials;
 import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
+import org.springframework.data.mongodb.config.EnableMongoAuditing;
+import org.springframework.data.mongodb.core.convert.CustomConversions;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Configuration
-@EnableMongoRepositories("com.gap.plan.templateservice.domain.repository")
-@ComponentScan("com.gap.plan.templateservice.domain.repository")
+@EnableMongoRepositories("com.planitpal.plan.templateservice.domain.repository")
+@ComponentScan("com.planitpal.plan.templateservice.domain.repository")
+@EnableMongoAuditing(auditorAwareRef = "auditor")
 public class MongoConfiguration extends AbstractMongoConfiguration {
 
-    @Value("${mongo.dbName}")
-    private String databaseName;
-
-    @Value("${mongo.username}")
-    private String username;
-
-    @Value("${mongo.password}")
-    private String password;
-
-    @Value("${mongo.hosts}")
-    private String[] hosts;
+    @Autowired
+    private PlanItPalServiceMongoConfig config;
 
     @Override
     protected String getDatabaseName() {
-        return databaseName;
+        return config.databaseName();
     }
 
     @Override
+    @Bean(name = "planningMongo")
     public Mongo mongo() throws Exception {
-        List<ServerAddress> serverAddresses = new ArrayList<ServerAddress>();
-        for (String host : hosts) {
-            serverAddresses.add(new ServerAddress(host));
-        }
+        return MongoFactory.newInstance(config);
+    }
 
-        MongoClientOptions.Builder builder = MongoClientOptions.builder();
-        builder.connectTimeout(5);
-        MongoClientOptions mongoClientOptions = builder.build();
-        MongoClient mongoClient = new MongoClient(serverAddresses, mongoClientOptions);
+    @Bean
+    public DB planningDB(@Qualifier("planningMongo") Mongo planningMongo) {
+        return planningMongo.getDB(getDatabaseName());
+    }
 
-        return mongoClient;
+    @Bean
+    @Override
+    public CustomConversions customConversions() {
+        List<Converter<?, ?>> converterList = new ArrayList<Converter<?, ?>>();
+        return new CustomConversions(converterList);
     }
 
     @Override
     protected UserCredentials getUserCredentials() {
-        return new UserCredentials(username, password);
+        return new UserCredentials(config.databaseUser(), config.databasePassword());
     }
 
     @Override
     protected String getMappingBasePackage() {
-        return "com.gap.plan.templateservice.domain.entity";
+        return "com.planitpal.plan.templateservice.domain";
     }
 }

@@ -91,6 +91,28 @@
     <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
+          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.aeonbits.owner/owner/1.0.8/d2dfa3f79190e63414ea118c6caeb58cb7f49844/owner-1.0.8.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.aeonbits.owner/owner/1.0.8/47889561cb215bc441973d2b0ffd20126ee764ae/owner-1.0.8-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" exported="">
+      <library>
+        <CLASSES>
+          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.collections/google-collections/1.0-rc2/9cebebe5d264eb81233027742f776c0d85ce3d6c/google-collections-1.0-rc2.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.collections/google-collections/1.0-rc2/95017d07e978d27c3d8d439bb476f892a4eaff0a/google-collections-1.0-rc2-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" exported="">
+      <library>
+        <CLASSES>
           <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-annotations/2.4.1/55605135bd7b836612e0bba7037c9669f6ccf89f/jackson-annotations-2.4.1.jar!/" />
         </CLASSES>
         <JAVADOC />
