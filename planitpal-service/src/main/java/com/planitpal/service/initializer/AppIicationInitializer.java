@@ -10,7 +10,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
 
-public class AppInitializer implements WebApplicationInitializer {
+public class AppIicationInitializer implements WebApplicationInitializer {
 
     private static final String CONFIG_LOCATION = "com.planitpal.service.config";
     private static final String MAPPING_URL = "/*";
