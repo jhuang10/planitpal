@@ -14,7 +14,6 @@ import static org.springframework.context.annotation.FilterType.ASSIGNABLE_TYPE;
 @Configuration
 @ComponentScan(
         basePackages = {"com.planitpal.service"},
-        useDefaultFilters = false,
         includeFilters = {@ComponentScan.Filter(type = ANNOTATION, value = {Configuration.class, Controller.class, Component.class})},
         excludeFilters = {@ComponentScan.Filter(type = ASSIGNABLE_TYPE, value = ApplicationConfiguration.class)}
 )

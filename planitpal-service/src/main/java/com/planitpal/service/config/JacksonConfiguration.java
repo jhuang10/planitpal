@@ -18,7 +18,6 @@ public class JacksonConfiguration {
         return converter;
     }
 
-
     @Bean
     @Lazy
     public ObjectMapper objectMapper() {
