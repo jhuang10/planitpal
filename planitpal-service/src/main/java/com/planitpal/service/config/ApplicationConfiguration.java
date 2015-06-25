@@ -13,10 +13,11 @@ import static org.springframework.context.annotation.FilterType.ASSIGNABLE_TYPE;
 @EnableWebMvc
 @Configuration
 @ComponentScan(
-        basePackages = {"com.planitpal.service"},
+        basePackages = {ApplicationConfiguration.BASE_PACKAGE},
         includeFilters = {@ComponentScan.Filter(type = ANNOTATION, value = {Configuration.class, Controller.class, Component.class})},
         excludeFilters = {@ComponentScan.Filter(type = ASSIGNABLE_TYPE, value = ApplicationConfiguration.class)}
 )
 public class ApplicationConfiguration extends WebMvcConfigurerAdapter {
 
+        public static final String BASE_PACKAGE = "com.planitpal.service";
 }
